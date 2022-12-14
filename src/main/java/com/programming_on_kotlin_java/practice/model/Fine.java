@@ -1,24 +1,48 @@
 package com.programming_on_kotlin_java.practice.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "fine")
 public class Fine {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "car_number")
     private String carNumber;
+
+    @Column(name = "intruder")
     private String intruder;
+
+    @Column(name = "inspector")
     private String inspector;
+
+    @Column(name = "time_protocol")
     private LocalDateTime timeProtocol;
+
+    @Column(name = "fine_amount")
     private Integer fineAmount;
+
+    @Column(name = "subpoena")
     private Boolean subpoena;
+
+    @Column(name = "payment_fine")
     private Boolean paymentFine;
+
+    @Column(name = "date_payment_fine")
     private LocalDate datePaymentFine;
+
+    @Column(name = "date_deadline_payment_fine")
     private LocalDate dateDeadlinePaymentFine;
 
     public Fine() {
     }
-
 
     public Integer getId() {
         return id;
@@ -60,7 +84,7 @@ public class Fine {
         this.timeProtocol = timeProtocol;
     }
 
-    public Integer getFineAmount() {
+    public int getFineAmount() {
         return fineAmount;
     }
 

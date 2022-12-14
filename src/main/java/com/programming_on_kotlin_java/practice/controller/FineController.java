@@ -6,6 +6,8 @@ import com.programming_on_kotlin_java.practice.exception.FineToCourtException;
 import com.programming_on_kotlin_java.practice.model.Fine;
 import com.programming_on_kotlin_java.practice.service.FineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +20,34 @@ public class FineController {
     @Autowired
     private FineService fineService;
 
-    @GetMapping
-    public ResponseEntity<?> getAllFines() {
-        final List<Fine> fines = fineService.getAllFines();
+    @GetMapping(value = "/{page}/{size}")
+    public ResponseEntity<?> getAllFines(@PathVariable int page, @PathVariable int size) {
+        final List<Fine> fines = fineService.getAllFines(PageRequest.of(page, size));
+        return fines != null && !fines.isEmpty()
+                ? ResponseEntity.ok(fines)
+                : ResponseEntity.badRequest().body("The fines database is empty.");
+    }
+
+    @GetMapping(value = "/{page}/{size}/sort/{name}")
+    public ResponseEntity<?> getAllFinesWithSorted(
+            @PathVariable String name,
+            @PathVariable int page,
+            @PathVariable int size
+    ) {
+        final List<Fine> fines = fineService.getAllFines(PageRequest.of(page, size, Sort.by(name)));
+        return fines != null && !fines.isEmpty()
+                ? ResponseEntity.ok(fines)
+                : ResponseEntity.badRequest().body("The page with fines is empty.");
+    }
+
+    @GetMapping(value = "/{page}/{size}/sort/{name1}/{name2}")
+    public ResponseEntity<?> getAllFinesWithSorted(
+            @PathVariable String name1,
+            @PathVariable String name2,
+            @PathVariable int page,
+            @PathVariable int size
+    ) {
+        final List<Fine> fines = fineService.getAllFines(PageRequest.of(page, size, Sort.by(name1, name2)));
         return fines != null && !fines.isEmpty()
                 ? ResponseEntity.ok(fines)
                 : ResponseEntity.badRequest().body("The fines database is empty.");
